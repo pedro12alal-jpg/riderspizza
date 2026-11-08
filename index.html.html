@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riders Pizza Sénas - Pizzas & Fast-Good sur le Pouce</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&family=Race+Sport&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        rider: {
+                            black: '#121212',
+                            dark: '#1e1e24',
+                            card: '#282830',
+                            red: '#e63946',
+                            redhover: '#c1272d',
+                            yellow: '#ffb703',
+                            accent: '#fb8500',
+                            light: '#f8f9fa'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Montserrat', 'sans-serif'],
+                        body: ['Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+        .font-title {
+            font-family: 'Montserrat', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e24;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e63946;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffb703;
+        }
+        .badge-pulse {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-rider-red selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-rider-dark/95 backdrop-blur-md border-b border-rider-red/30 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Nom -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="scrollToSection('hero')">
+                    <div class="bg-rider-red text-white p-2.5 rounded-xl transform -rotate-3 shadow-md border-2 border-rider-yellow flex items-center justify-center">
+                        <i class="fa-solid font-bold fa-motorcycle text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-title font-black text-2xl tracking-wider text-white uppercase italic">RIDERS<span class="text-rider-red">PIZZA</span></span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-semibold tracking-wide flex items-center">
+                            <i class="fa-solid fa-location-dot text-rider-yellow mr-1"></i> Sénas (13560)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Info resto rapide (Desktop) -->
+                <div class="hidden md:flex items-center space-x-6 text-xs text-gray-300 border-x border-gray-700 px-6">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-clock text-rider-yellow text-lg"></i>
+                        <div>
+                            <p class="font-bold text-white">Ouvert 7j/7</p>
+                            <p class="text-gray-400">18h00 - 22h30</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-phone text-rider-red text-lg"></i>
+                        <div>
+                            <p class="font-bold text-white">Commande Directe</p>
+                            <a href="tel:0490000000" class="hover:text-rider-yellow transition">04 90 00 00 00</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bouton Panier -->
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleCartDrawer()" class="relative bg-rider-red hover:bg-rider-redhover text-white px-4 py-2.5 rounded-xl font-title font-bold transition flex items-center space-x-2 shadow-lg shadow-rider-red/20 active:scale-95">
+                        <i class="fa-solid fa-basket-shopping text-lg"></i>
+                        <span class="hidden sm:inline">Mon Panier</span>
+                        <span id="cart-badge-count" class="bg-rider-yellow text-rider-black font-black text-xs px-2 py-0.5 rounded-full ml-1">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- HERO SECTION -->
+        <section id="hero" class="relative bg-gradient-to-r from-rider-black via-rider-dark to-black py-16 lg:py-24 overflow-hidden border-b border-gray-800">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e63946_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div class="absolute -right-20 -top-20 w-96 h-96 bg-rider-red/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-rider-yellow/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-center md:text-left">
+                        <div class="inline-flex items-center space-x-2 bg-rider-card border border-rider-red/40 px-3 py-1.5 rounded-full text-rider-yellow text-xs font-bold uppercase tracking-widest">
+                            <i class="fa-solid fa-fire text-rider-red"></i>
+                            <span>Pizzas Artisanales & Livraison Rapide</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-title font-black uppercase italic tracking-tight leading-none text-white">
+                            Des Pizzas <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-rider-red via-rider-accent to-rider-yellow">Taillées pour la route</span>
+                        </h1>
+                        <p class="text-gray-300 text-base sm:text-lg max-w-xl font-light">
+                            Préparées chaque jour à **Sénas** avec de la pâte fraîche pétrie à la main et des ingrédients de qualité. À emporter ou en livraison à domicile !
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-2">
+                            <a href="#menu" class="w-full sm:w-auto bg-rider-red hover:bg-rider-redhover text-white font-title font-black text-center px-8 py-4 rounded-xl uppercase tracking-wider transition transform hover:-translate-y-0.5 shadow-lg shadow-rider-red/30 flex items-center justify-center space-x-2">
+                                <span>Commander Maintenant</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                            <a href="#infos" class="w-full sm:w-auto bg-rider-card hover:bg-gray-800 text-gray-200 font-title font-bold text-center px-6 py-4 rounded-xl transition border border-gray-700 flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-clock text-rider-yellow"></i>
+                                <span>Horaires & Adresse</span>
+                            </a>
+                        </div>
+                        <!-- Features highlights -->
+                        <div class="pt-6 grid grid-cols-3 gap-2 border-t border-gray-800 text-center">
+                            <div>
+                                <p class="font-title font-bold text-rider-yellow text-lg">100%</p>
+                                <p class="text-xs text-gray-400">Pâte Fraîche</p>
+                            </div>
+                            <div>
+                                <p class="font-title font-bold text-rider-red text-lg">Fast</p>
+                                <p class="text-xs text-gray-400">Livraison Sénas</p>
+                            </div>
+                            <div>
+                                <p class="font-title font-bold text-rider-accent text-lg">Artisanal</p>
+                                <p class="text-xs text-gray-400">Cuisson Parfaite</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hero Image -->
+                    <div class="relative flex justify-center">
+                        <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden border-4 border-rider-card shadow-2xl group">
+                            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" alt="Pizza Gourmande Riders Pizza" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4 p-4 bg-rider-dark/90 backdrop-blur rounded-2xl border border-gray-700 flex items-center justify-between">
+                                <div>
+                                    <p class="font-title font-bold text-white">La Spéciale "Rider"</p>
+                                    <p class="text-xs text-gray-400">Sauce tomate, Mozzarella, Chorizo, Merguez, Poivrons</p>
+                                </div>
+                                <span class="bg-rider-yellow text-rider-black font-black text-sm px-3 py-1.5 rounded-xl">14.50 €</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MENU SECTION -->
+        <section id="menu" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Title -->
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-3xl sm:text-4xl font-title font-black uppercase tracking-tight text-white">
+                    Notre <span class="text-rider-red">Carte</span> & nos Spécialités
+                </h2>
+                <p class="text-gray-400 text-sm mt-2">Choisissez vos produits préférés et ajoutez-les directement à votre panier.</p>
+            </div>
+
+            <!-- Categories Tabs -->
+            <div class="flex items-center justify-start md:justify-center space-x-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+                <button onclick="filterCategory('all')" id="cat-btn-all" class="cat-btn active bg-rider-red text-white font-title font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap transition shadow-md">
+                    <i class="fa-solid fa-utensils mr-2"></i>Tout le Menu
+                </button>
+                <button onclick="filterCategory('tomate')" id="cat-btn-tomate" class="cat-btn bg-rider-card hover:bg-gray-800 text-gray-300 font-title font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap transition border border-gray-800">
+                    <i class="fa-solid fa-pepper-hot text-rider-red mr-2"></i>Base Tomate
+                </button>
+                <button onclick="filterCategory('creme')" id="cat-btn-creme" class="cat-btn bg-rider-card hover:bg-gray-800 text-gray-300 font-title font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap transition border border-gray-800">
+                    <i class="fa-solid fa-cheese text-rider-yellow mr-2"></i>Base Crème
+                </button>
+                <button onclick="filterCategory('calzone')" id="cat-btn-calzone" class="cat-btn bg-rider-card hover:bg-gray-800 text-gray-300 font-title font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap transition border border-gray-800">
+                    <i class="fa-solid fa-box text-rider-accent mr-2"></i>Calzones
+                </button>
+                <button onclick="filterCategory('boisson')" id="cat-btn-boisson" class="cat-btn bg-rider-card hover:bg-gray-800 text-gray-300 font-title font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap transition border border-gray-800">
+                    <i class="fa-solid fa-bottle-water text-blue-400 mr-2"></i>Boissons
+                </button>
+                <button onclick="filterCategory('dessert')" id="cat-btn-dessert" class="cat-btn bg-rider-card hover:bg-gray-800 text-gray-300 font-title font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap transition border border-gray-800">
+                    <i class="fa-solid fa-cookie text-pink-400 mr-2"></i>Desserts
+                </button>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Products dynamically rendered here -->
+            </div>
+        </section>
+
+        <!-- INFOS & HORAIRES SECTION -->
+        <section id="infos" class="bg-rider-dark border-t border-gray-800 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Adresse & Accès -->
+                    <div class="bg-rider-card p-6 rounded-2xl border border-gray-700/60 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-rider-red/20 text-rider-red rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </div>
+                            <h3 class="font-title font-bold text-xl text-white mb-2">Notre Pizzeria</h3>
+                            <p class="text-gray-300 text-sm mb-4">Riders Pizza est installée au cœur de Sénas pour vous servir les meilleures pizzas au feu de bois de la région.</p>
+                            <p class="text-gray-400 text-xs font-mono bg-rider-black p-3 rounded-lg border border-gray-800">
+                                📍 12 Avenue Gabriel Péri<br>
+                                13560 Sénas, France
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <span class="text-xs text-rider-yellow font-semibold"><i class="fa-solid fa-truck-fast mr-1"></i> Zone de livraison : Sénas & Orgon (rayon 7km)</span>
+                        </div>
+                    </div>
+
+                    <!-- Horaires -->
+                    <div class="bg-rider-card p-6 rounded-2xl border border-gray-700/60">
+                        <div class="w-12 h-12 bg-rider-yellow/20 text-rider-yellow rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <h3 class="font-title font-bold text-xl text-white mb-2">Horaires d'Ouverture</h3>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex justify-between py-1 border-b border-gray-700/50">
+                                <span>Lundi - Jeudi</span>
+                                <span class="font-mono text-rider-yellow">18h00 - 22h00</span>
+                            </li>
+                            <li class="flex justify-between py-1 border-b border-gray-700/50">
+                                <span>Vendredi - Samedi</span>
+                                <span class="font-mono text-rider-yellow">18h00 - 22h30</span>
+                            </li>
+                            <li class="flex justify-between py-1">
+                                <span>Dimanche</span>
+                                <span class="font-mono text-rider-yellow">18h00 - 22h30</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact & Commande Rapide -->
+                    <div class="bg-rider-card p-6 rounded-2xl border border-gray-700/60 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-rider-accent/20 text-rider-accent rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <h3 class="font-title font-bold text-xl text-white mb-2">Contact & Réservation</h3>
+                            <p class="text-gray-300 text-sm mb-4">Une question sur un allergène ou une commande spéciale pour un événement ?</p>
+                            <a href="tel:0490000000" class="block w-full text-center bg-gray-800 hover:bg-gray-700 text-white font-title font-bold py-3 rounded-xl border border-gray-600 transition mb-3">
+                                <i class="fa-solid fa-phone text-rider-red mr-2"></i> 04 90 00 00 00
+                            </a>
+                        </div>
+                        <div class="flex justify-center space-x-4 text-gray-400 text-lg">
+                            <a href="#" class="hover:text-rider-red transition"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="#" class="hover:text-rider-red transition"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="hover:text-rider-red transition"><i class="fa-brands fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-rider-black border-t border-gray-800 py-8 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <div class="flex justify-center items-center space-x-2">
+                <span class="font-title font-bold text-gray-300 uppercase">Riders Pizza Sénas</span>
+                <span>•</span>
+                <span>Pizzeria Artisanale</span>
+            </div>
+            <p>© 2026 Riders Pizza Sénas. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- CART DRAWER / SIDEBAR -->
+    <div id="cart-drawer-backdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 w-full sm:w-[450px] h-full bg-rider-dark z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col border-l border-gray-800">
+        <!-- Drawer Header -->
+        <div class="p-5 border-b border-gray-800 flex items-center justify-between bg-rider-black">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-basket-shopping text-rider-red text-xl"></i>
+                <h2 class="font-title font-bold text-xl text-white uppercase">Votre Panier</h2>
+            </div>
+            <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white p-2 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Content -->
+        <div id="cart-items-container" class="flex-grow overflow-y-auto p-5 space-y-4">
+            <!-- Cart items will be rendered here -->
+        </div>
+
+        <!-- Drawer Footer / Checkout Form -->
+        <div class="p-5 border-t border-gray-800 bg-rider-black space-y-4">
+            <!-- Mode de retrait -->
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Mode de retrait</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setOrderMode('takeaway')" id="btn-mode-takeaway" class="mode-btn active py-2.5 px-3 rounded-xl border border-rider-red bg-rider-red/20 text-white font-title text-xs font-bold flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>À Emporter</span>
+                    </button>
+                    <button onclick="setOrderMode('delivery')" id="btn-mode-delivery" class="mode-btn py-2.5 px-3 rounded-xl border border-gray-700 bg-rider-card text-gray-400 font-title text-xs font-bold flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-motorcycle"></i>
+                        <span>Livraison (+2.50€)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recap prix -->
+            <div class="space-y-1.5 text-sm pt-2 border-t border-gray-800">
+                <div class="flex justify-between text-gray-400">
+                    <span>Sous-total</span>
+                    <span id="cart-subtotal" class="font-mono">0.00 €</span>
+                </div>
+                <div class="flex justify-between text-gray-400" id="delivery-cost-row">
+                    <span>Frais de livraison</span>
+                    <span id="cart-delivery-cost" class="font-mono">0.00 €</span>
+                </div>
+                <div class="flex justify-between text-white font-title font-bold text-lg pt-2 border-t border-gray-800">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-rider-yellow font-mono">0.00 €</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <button onclick="openCheckoutModal()" id="btn-checkout" class="w-full bg-rider-red hover:bg-rider-redhover text-white font-title font-bold py-3.5 rounded-xl uppercase tracking-wider transition shadow-lg shadow-rider-red/20 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span>Valider la Commande</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-rider-dark border border-gray-700 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="p-4 bg-rider-black border-b border-gray-800 flex justify-between items-center">
+                <h3 class="font-title font-bold text-lg text-white uppercase">Finaliser la commande</h3>
+                <button onclick="closeCheckoutModal()" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form id="order-form" onsubmit="submitOrder(event)" class="p-6 overflow-y-auto space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Nom Complet *</label>
+                    <input type="text" id="customer-name" required placeholder="ex: Jean Dupont" class="w-full bg-rider-card border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-rider-red">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Numéro de Téléphone *</label>
+                    <input type="tel" id="customer-phone" required placeholder="ex: 06 12 34 56 78" class="w-full bg-rider-card border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-rider-red">
+                </div>
+
+                <div id="delivery-address-field" class="hidden">
+                    <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Adresse de Livraison (Sénas & alentours) *</label>
+                    <input type="text" id="customer-address" placeholder="ex: 15 Rue de la République, 13560 Sénas" class="w-full bg-rider-card border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-rider-red">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Heure souhaitée *</label>
+                    <select id="customer-time" required class="w-full bg-rider-card border border-gray-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-rider-red">
+                        <option value="Au plus vite (dès que prêt)">Dès que possible (~20-30 min)</option>
+                        <option value="19h00">19h00</option>
+                        <option value="19h30">19h30</option>
+                        <option value="20h00">20h00</option>
+                        <option value="20h30">20h30</option>
+                        <option value="21h00">21h00</option>
+                        <option value="21h30">21h30</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Commentaire / Instructions (Optionnel)</label>
+                    <textarea id="customer-notes" rows="2" placeholder="ex: Sans oignons, code porte 1234..." class="w-full bg-rider-card border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-rider-red"></textarea>
+                </div>
+
+                <!-- Payment Method Notice -->
+                <div class="p-3 bg-rider-card rounded-xl border border-gray-800 text-xs text-gray-300 flex items-center space-x-3">
+                    <i class="fa-solid fa-credit-card text-rider-yellow text-lg"></i>
+                    <span>Paiement sur place ou à la livraison (Espèces, Carte Bancaire ou Tickets Resto).</span>
+                </div>
+
+                <button type="submit" class="w-full bg-rider-red hover:bg-rider-redhover text-white font-title font-bold py-4 rounded-xl uppercase tracking-wider transition shadow-lg shadow-rider-red/30 flex items-center justify-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>Envoyer la commande via WhatsApp</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <div id="success-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="bg-rider-dark border border-rider-yellow/40 w-full max-w-md rounded-2xl shadow-2xl p-6 text-center space-y-4">
+            <div class="w-16 h-16 bg-rider-yellow/20 text-rider-yellow rounded-full flex items-center justify-center mx-auto text-3xl">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="font-title font-black text-2xl text-white uppercase">Commande Transmise !</h3>
+            <p class="text-xs text-gray-400">Numéro de Commande : <span id="summary-order-id" class="font-mono text-rider-yellow font-bold"></span></p>
+            
+            <div id="order-summary-box" class="bg-rider-black p-4 rounded-xl text-left text-xs space-y-2 text-gray-300 border border-gray-800">
+                <!-- Order details injected here -->
+            </div>
+
+            <p class="text-xs text-gray-400">Merci de votre confiance ! Riders Pizza prépare votre commande.</p>
+
+            <button onclick="closeSuccessModal()" class="w-full bg-rider-card hover:bg-gray-800 text-white font-title font-bold py-3 rounded-xl border border-gray-700 transition">
+                Fermer
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // MENU DATA
+        const PRODUCTS = [
+            {
+                id: 1,
+                name: "La Margherita",
+                category: "tomate",
+                price: 9.50,
+                ingredients: "Sauce tomate, Mozzarella fior di latte, Huile d'olive, Basilic frais",
+                image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "La Rider Power",
+                category: "tomate",
+                price: 14.50,
+                ingredients: "Sauce tomate, Mozzarella, Chorizo piquant, Merguez, Poivrons grillés, Œuf",
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Reine Sénassoise",
+                category: "tomate",
+                price: 12.00,
+                ingredients: "Sauce tomate, Mozzarella, Jambon supérieur, Champignons frais, Olives noires",
+                image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 4,
+                name: "4 Fromages GP",
+                category: "creme",
+                price: 13.50,
+                ingredients: "Crème fraîche, Mozzarella, Chèvre de pays, Gorgonzola DOP, Emmental",
+                image: "https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                name: "La Biquette & Miel",
+                category: "creme",
+                price: 13.00,
+                ingredients: "Crème fraîche, Mozzarella, Chèvre, Miel de Provence, Noix torréfiées",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 6,
+                name: "Calzone Biker",
+                category: "calzone",
+                price: 13.00,
+                ingredients: "Sauce tomate, Mozzarella, Jambon, Champignons, Œuf coulant",
+                image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 7,
+                name: "Chicken BBQ",
+                category: "tomate",
+                price: 13.50,
+                ingredients: "Sauce BBQ maison, Mozzarella, Poulet mariné, Oignons rouges, Maïs",
+                image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 8,
+                name: "Coca-Cola (33cl)",
+                category: "boisson",
+                price: 2.50,
+                ingredients: "Boisson rafraîchissante gazeuse (33cl)",
+                image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 9,
+                name: "Bière Artisanal Rider (33cl)",
+                category: "boisson",
+                price: 4.50,
+                ingredients: "Bière blonde locale 5.5%",
+                image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 10,
+                name: "Tiramisu Nutella Maison",
+                category: "dessert",
+                price: 4.50,
+                ingredients: "Fait maison avec amour par notre chef",
+                image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let cart = [];
+        let orderMode = 'takeaway'; // 'takeaway' or 'delivery'
+        const DELIVERY_FEE = 2.50;
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts('all');
+            updateCartUI();
+        });
+
+        // RENDER PRODUCTS
+        function renderProducts(category) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            const filteredProducts = category === 'all' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.category === category);
+
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-rider-card rounded-2xl border border-gray-800 overflow-hidden flex flex-col justify-between hover:border-rider-red/50 transition duration-300 shadow-lg group";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-rider-card via-transparent to-transparent"></div>
+                            <span class="absolute top-3 right-3 bg-rider-yellow text-rider-black font-title font-black text-sm px-3 py-1 rounded-full shadow">
+                                ${product.price.toFixed(2)} €
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-title font-bold text-lg text-white mb-1 group-hover:text-rider-yellow transition">${product.name}</h3>
+                            <p class="text-xs text-gray-400 font-light leading-relaxed line-clamp-2">${product.ingredients}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <button onclick="addToCart(${product.id})" class="w-full bg-rider-dark hover:bg-rider-red text-white border border-gray-700 hover:border-rider-red font-title text-xs font-bold py-3 rounded-xl uppercase tracking-wider transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-plus text-rider-yellow group-hover:text-white"></i>
+                            <span>Ajouter au Panier</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // CATEGORY FILTER
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-rider-red', 'text-white');
+                btn.classList.add('bg-rider-card', 'text-gray-300');
+            });
+
+            const activeBtn = document.getElementById(`cat-btn-${cat}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-rider-card', 'text-gray-300');
+                activeBtn.classList.add('bg-rider-red', 'text-white');
+            }
+
+            renderProducts(cat);
+        }
+
+        // CART LOGIC
+        function addToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            
+            // Visual feedback on cart badge
+            const badge = document.getElementById('cart-badge-count');
+            badge.classList.add('badge-pulse');
+            setTimeout(() => badge.classList.remove('badge-pulse'), 1500);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function changeQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCartUI();
+            }
+        }
+
+        function setOrderMode(mode) {
+            orderMode = mode;
+            
+            // Update UI buttons
+            const takeawayBtn = document.getElementById('btn-mode-takeaway');
+            const deliveryBtn = document.getElementById('btn-mode-delivery');
+            const addressField = document.getElementById('delivery-address-field');
+            const addressInput = document.getElementById('customer-address');
+
+            if (mode === 'takeaway') {
+                takeawayBtn.className = "mode-btn active py-2.5 px-3 rounded-xl border border-rider-red bg-rider-red/20 text-white font-title text-xs font-bold flex items-center justify-center space-x-2";
+                deliveryBtn.className = "mode-btn py-2.5 px-3 rounded-xl border border-gray-700 bg-rider-card text-gray-400 font-title text-xs font-bold flex items-center justify-center space-x-2";
+                addressField.classList.add('hidden');
+                addressInput.removeAttribute('required');
+            } else {
+                deliveryBtn.className = "mode-btn active py-2.5 px-3 rounded-xl border border-rider-red bg-rider-red/20 text-white font-title text-xs font-bold flex items-center justify-center space-x-2";
+                takeawayBtn.className = "mode-btn py-2.5 px-3 rounded-xl border border-gray-700 bg-rider-card text-gray-400 font-title text-xs font-bold flex items-center justify-center space-x-2";
+                addressField.classList.remove('hidden');
+                addressInput.setAttribute('required', 'true');
+            }
+
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-badge-count');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const deliveryCostEl = document.getElementById('cart-delivery-cost');
+            const totalEl = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('btn-checkout');
+
+            // Total count items
+            const totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+            badge.innerText = totalCount;
+
+            // Container Render
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center text-gray-500 py-12">
+                        <i class="fa-solid fa-pizza-slice text-5xl mb-3 text-gray-700"></i>
+                        <p class="font-title font-bold text-gray-400">Votre panier est vide</p>
+                        <p class="text-xs">Ajoutez de délicieuses pizzas pour commencer votre commande.</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.disabled = false;
+                container.innerHTML = '';
+                cart.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = "flex items-center justify-between bg-rider-card p-3 rounded-xl border border-gray-800";
+                    itemEl.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover">
+                            <div>
+                                <h4 class="font-title font-bold text-xs text-white">${item.name}</h4>
+                                <p class="text-xs text-rider-yellow font-mono">${(item.price * item.quantity).toFixed(2)} €</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-rider-dark p-1 rounded-lg border border-gray-700">
+                            <button onclick="changeQuantity(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white text-xs">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <span class="font-mono text-xs text-white w-4 text-center">${item.quantity}</span>
+                            <button onclick="changeQuantity(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white text-xs">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(itemEl);
+                });
+            }
+
+            // Calculations
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const deliveryCost = orderMode === 'delivery' && cart.length > 0 ? DELIVERY_FEE : 0;
+            const total = subtotal + deliveryCost;
+
+            subtotalEl.innerText = `${subtotal.toFixed(2)} €`;
+            deliveryCostEl.innerText = `${deliveryCost.toFixed(2)} €`;
+            totalEl.innerText = `${total.toFixed(2)} €`;
+        }
+
+        // DRAWER CONTROLS
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-drawer-backdrop');
+
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // CHECKOUT MODAL CONTROLS
+        function openCheckoutModal() {
+            if (cart.length === 0) return;
+            toggleCartDrawer();
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        // ORDER SUBMISSION & WHATSAPP GENERATION
+        function submitOrder(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const address = document.getElementById('customer-address').value;
+            const time = document.getElementById('customer-time').value;
+            const notes = document.getElementById('customer-notes').value;
+
+            const orderId = 'RD-' + Math.floor(1000 + Math.random() * 9000);
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const deliveryCost = orderMode === 'delivery' ? DELIVERY_FEE : 0;
+            const total = (subtotal + deliveryCost).toFixed(2);
+
+            // Construct WhatsApp Message
+            let message = `🚀 *NOUVELLE COMMANDE RIDERS PIZZA (${orderId})*\n\n`;
+            message += `👤 *Client:* ${name}\n`;
+            message += `📞 *Tel:* ${phone}\n`;
+            message += `🛵 *Mode:* ${orderMode === 'delivery' ? 'LIVRAISON A DOMICILE' : 'A EMPORTER'}\n`;
+            if (orderMode === 'delivery') {
+                message += `📍 *Adresse:* ${address}\n`;
+            }
+            message += `⏰ *Heure demandée:* ${time}\n\n`;
+            message += `🍕 *DETAIL DE LA COMMANDE:*\n`;
+
+            cart.forEach(item => {
+                message += `• ${item.quantity}x ${item.name} (${(item.price * item.quantity).toFixed(2)}€)\n`;
+            });
+
+            if (notes) {
+                message += `\n📝 *Notes:* ${notes}\n`;
+            }
+
+            message += `\n💰 *TOTAL A PAYER:* ${total} €`;
+
+            // Open WhatsApp link (using mock shop number or target)
+            const whatsappNum = "33490000000"; // Numéro de la pizzeria
+            const encodedMsg = encodeURIComponent(message);
+            window.open(`https://wa.me/${whatsappNum}?text=${encodedMsg}`, '_blank');
+
+            // Render Success Modal
+            document.getElementById('summary-order-id').innerText = orderId;
+            document.getElementById('order-summary-box').innerHTML = `
+                <p><strong>Nom:</strong> ${name}</p>
+                <p><strong>Mode:</strong> ${orderMode === 'delivery' ? 'Livraison' : 'À Emporter'}</p>
+                <p><strong>Heure:</strong> ${time}</p>
+                <p><strong>Total:</strong> ${total} €</p>
+            `;
+
+            closeCheckoutModal();
+            document.getElementById('success-modal').classList.remove('hidden');
+
+            // Reset Cart
+            cart = [];
+            updateCartUI();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
